@@ -1,24 +1,22 @@
 import type { GetServerSidePropsResult, GetServerSidePropsContext } from "next";
 import Head from "next/head";
-import { Inter } from "next/font/google";
 import { Game } from "./api/src.types";
 import { getPBs } from "./api/src";
 import styles from "@/styles/Home.module.css";
 import GameComponent from "@/components/game";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export async function getServerSideProps({
   res,
+  query,
 }: GetServerSidePropsContext): Promise<
   GetServerSidePropsResult<{ games: Game[] }>
 > {
   res.setHeader(
     "Cache-Control",
-    "public, s-maxage=10, stale-while-revalidate=59"
+    "public, s-maxage=86400, stale-while-revalidate=3600"
   );
-
-  const games = await getPBs();
+  const user = (query["user"] as string) || "lliksis";
+  const games = await getPBs(user);
   return {
     props: { games },
   };

@@ -1,20 +1,24 @@
+import React from "react";
 import Image from "next/image";
 import { Game } from "@/pages/api/src.types";
 import styles from "@/styles/Home.module.css";
 
 const Game = (game: Game) => {
-  const getTrophy = (place: number) => {
-    switch (place) {
-      case 1:
-        return game.game_trophy_1;
-      case 2:
-        return game.game_trophy_2;
-      case 3:
-        return game.game_trophy_3;
-      default:
-        return undefined;
-    }
-  };
+  const getTrophy = React.useCallback(
+    (place: number) => {
+      switch (place) {
+        case 1:
+          return game.game_trophy_1;
+        case 2:
+          return game.game_trophy_2;
+        case 3:
+          return game.game_trophy_3;
+        default:
+          return undefined;
+      }
+    },
+    [game.game_trophy_1, game.game_trophy_2, game.game_trophy_3]
+  );
 
   return (
     <section

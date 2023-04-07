@@ -3,7 +3,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import type { Game, PB, SRCGame_raw, SRCPB_raw } from "./src.types";
 
 const srcBase = "https://www.speedrun.com/api/v1";
-const srcPBs = `${srcBase}/users/jn3dp14x/personal-bests`;
+const srcPBs = (user: string) =>
+  `${srcBase}/users/${user}/personal-bests?max=200`;
 
 const categoryCache = new Map<string, string>();
 
@@ -11,13 +12,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Game[]>
 ) {
-  const pbs = await getPBs();
+  const user = (req.query["user"] as string) || "lliksis";
+  const pbs = await getPBs(user);
   res.status(200).json(pbs);
 }
 
-export const getPBs = async () => {
+export const getPBs = async (user: string) => {
   try {
-    const response = await fetch(srcPBs);
+    const response = await fetch(srcPBs(user));
     const pbs: SRCPB_raw[] = (await response.json()).data;
 
     const parsedPbs = await parsePBs(pbs);
@@ -112,8 +114,8 @@ const parseCategory = async (category: string) => {
 };
 
 const getRunEmbedVideo = async (run: string) => {
-  var embed_link = undefined;
-  var thumbnail = undefined;
+  var embed_link = null;
+  var thumbnail = null;
   const response = await fetch(`${srcBase}/runs/${run}`);
   const videoUrl: string = (await response.json()).data.videos.links[0].uri;
 

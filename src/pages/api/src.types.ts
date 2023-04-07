@@ -73,6 +73,6 @@ export type PB = {
   category: string;
   time: string;
   yt_link: string;
-  yt_embed_link?: string;
-  yt_thumbnail?: string;
+  yt_embed_link: string | null;
+  yt_thumbnail: string | null;
 };
