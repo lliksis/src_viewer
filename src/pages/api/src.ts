@@ -2,10 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { Game, PB, SRCGame_raw, SRCPB_raw } from "./src.types";
 
-export const config = {
-  runtime: "edge",
-};
-
 const srcBase = "https://www.speedrun.com/api/v1";
 const srcPBs = (user: string) =>
   `${srcBase}/users/${user}/personal-bests?max=200`;
