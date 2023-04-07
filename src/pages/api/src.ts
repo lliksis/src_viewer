@@ -10,16 +10,25 @@ const categoryCache = new Map<string, string>();
 const variableCache = new Map<string, string>();
 
 export default async function handler(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const user = searchParams.get("user") || "lliksis";
-  const pbs = await getPBs(user);
-  return new Response(JSON.stringify(pbs), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-      "Cache-Control": "s-maxage=86400, stale-while-revalidate=43200",
-    },
-  });
+  try {
+    const { searchParams } = new URL(req.url);
+    const user = searchParams.get("user") || "lliksis";
+    const pbs = await getPBs(user);
+    return new Response(JSON.stringify(pbs), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "s-maxage=86400, stale-while-revalidate=43200",
+      },
+    });
+  } catch (error) {
+    return new Response(JSON.stringify(error), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
 }
 
 export const getPBs = async (user: string) => {
