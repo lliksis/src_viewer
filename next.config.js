@@ -4,7 +4,7 @@ const nextConfig = {
   images: {
     domains: ["img.youtube.com", "www.speedrun.com"],
     loader: "custom",
-    loaderFile: "./imgeLoader.js",
+    loaderFile: "./imageLoader.js",
   },
   experimental: {
     runtime: "experimental-edge",
