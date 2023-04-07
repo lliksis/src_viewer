@@ -35,7 +35,7 @@ const Game = (game: Game) => {
           {game.pbs.map((pb) => (
             <div key={pb.id} className={styles.card}>
               {pb.yt_thumbnail && (
-                <Image alt="" src={pb.yt_thumbnail} height={150} width={300} />
+                <Image alt="" src={pb.yt_thumbnail} height={175} width={350} />
               )}
               <span>
                 {getTrophy(pb.place) && (
@@ -46,10 +46,11 @@ const Game = (game: Game) => {
                     width={13}
                   />
                 )}
-                {} {pb.place}. {pb.category} - {pb.time}
+                {} {pb.place}. {pb.category}{" "}
+                {pb.variables && `(${pb.variables})`} - {pb.time}
               </span>
               <p>
-                <a href="https://www.speedrun.com" target="src">
+                <a href={pb.weblink} target="src">
                   speedrun.com
                 </a>
               </p>

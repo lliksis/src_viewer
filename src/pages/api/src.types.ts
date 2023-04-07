@@ -2,7 +2,9 @@ export type SRCRun_raw = {
   id: string;
   game: string;
   category: string;
+  weblink: string;
   times: SRCTimes_raw;
+  values: { [key: string]: string };
 };
 
 export type SRCTimes_raw = {
@@ -71,6 +73,8 @@ export type PB = {
   id: string;
   place: number;
   category: string;
+  variables: string | null;
+  weblink: string;
   time: string;
   yt_link: string;
   yt_embed_link: string | null;

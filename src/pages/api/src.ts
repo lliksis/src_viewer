@@ -7,6 +7,7 @@ const srcPBs = (user: string) =>
   `${srcBase}/users/${user}/personal-bests?max=200`;
 
 const categoryCache = new Map<string, string>();
+const variableCache = new Map<string, string>();
 
 export default async function handler(
   req: NextApiRequest,
@@ -50,9 +51,11 @@ const parsePBs = async (pbs: SRCPB_raw[]) => {
       place,
       run: {
         category,
+        weblink,
         id,
         times: { primary },
         game,
+        values,
       },
     } = pbs[index];
 
@@ -63,6 +66,8 @@ const parsePBs = async (pbs: SRCPB_raw[]) => {
       id,
       place,
       category: categoryCache.get(category) || (await parseCategory(category)),
+      variables: await parseVariables(values),
+      weblink,
       time: durationToString(primary),
       yt_link: videoUrl,
       yt_embed_link: embed_link,
@@ -111,6 +116,25 @@ const parseCategory = async (category: string) => {
   ).data.name;
   categoryCache.set(category, rawCategory);
   return rawCategory;
+};
+
+const parseVariables = async (values: any) => {
+  const variables: string[] = [];
+  for (const key in values) {
+    const variableId = values[key];
+    if (variableCache.has(variableId)) {
+      variables.push(variableCache.get(variableId)!);
+      continue;
+    }
+    const label: string = (
+      await fetch(`${srcBase}/variables/${key}`).then((response) =>
+        response.json()
+      )
+    ).data.values.values[variableId].label;
+    variables.push(label);
+    variableCache.set(variableId, label);
+  }
+  return variables.join(", ") || null;
 };
 
 const getRunEmbedVideo = async (run: string) => {
