@@ -9,13 +9,16 @@ const srcPBs = (user: string) =>
 const categoryCache = new Map<string, string>();
 const variableCache = new Map<string, string>();
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Game[]>
-) {
+export default async function handler(req: NextApiRequest) {
   const user = (req.query["user"] as string) || "lliksis";
   const pbs = await getPBs(user);
-  res.status(200).json(pbs);
+  return new Response(JSON.stringify(pbs), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "s-maxage=86400, stale-while-revalidate=43200",
+    },
+  });
 }
 
 export const getPBs = async (user: string) => {
