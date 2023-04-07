@@ -6,15 +6,14 @@ import styles from "@/styles/Home.module.css";
 import GameComponent from "@/components/game";
 
 export async function getServerSideProps({
-  res,
   query,
 }: GetServerSidePropsContext): Promise<
   GetServerSidePropsResult<{ games: Game[] }>
 > {
-  res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=86400, stale-while-revalidate=3600"
-  );
+  //   res.setHeader(
+  //     "Cache-Control",
+  //     "public, s-maxage=86400, stale-while-revalidate=3600"
+  //   );
   const user = (query["user"] as string) || "lliksis";
   const games = await getPBs(user);
   return {

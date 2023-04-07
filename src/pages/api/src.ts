@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
 import type { Game, PB, SRCGame_raw, SRCPB_raw } from "./src.types";
 
 const srcBase = "https://www.speedrun.com/api/v1";
@@ -9,8 +9,9 @@ const srcPBs = (user: string) =>
 const categoryCache = new Map<string, string>();
 const variableCache = new Map<string, string>();
 
-export default async function handler(req: NextApiRequest) {
-  const user = (req.query["user"] as string) || "lliksis";
+export default async function handler(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const user = searchParams.get("user") || "lliksis";
   const pbs = await getPBs(user);
   return new Response(JSON.stringify(pbs), {
     status: 200,
