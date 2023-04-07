@@ -5,7 +5,7 @@ const nextConfig = {
     domains: ["img.youtube.com", "www.speedrun.com"],
   },
   experimental: {
-    runtime: "edge",
+    runtime: "experimental-edge",
   },
 };
 
